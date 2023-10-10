@@ -41,10 +41,7 @@ export interface MEMResponseObject {
 export interface MEM {
   setFunctionId(functionId: string): void;
   read(otherFunctionId?: string): Promise<state | undefined>;
-  write(
-    inputs: input[],
-    otherFunctionId?: string
-  ): Promise<MEMResponseObject | undefined>;
+  write(inputs: input[], otherFunctionId?: string): Promise<MEMResponseObject | undefined>;
   testnet(
     contractType: number,
     initState: string,
