@@ -26,24 +26,43 @@ bun add mem-js
 
 ### How to get started with mem-js in your React app:
 
-
 ```tsx 
-//App.js | index.js
+// First, let's wrap the APP with our MEM provider:
 
+// If you're using next.js, this should be your _app.tsx file
 import React from 'react';
-import { ArconnectProvider, ArconnectContext } from 'react-arconnect';
 
-//wrap the root component with <ArconnectProvider />
-export default function Home() {
-  const permissions = ["ACCESS_ADDRESS"]
+import { MEMContext } from "mem-js";
+import "../styles/globals.css";
 
+function ExampleApp({ Component, pageProps }) {
   return (
-    <ArconnectProvider permissions={permissions}>
-      <Name />
-    </ArconnectProvider>
-  )
+    <MEMContext.Provider value={{}}>
+      <Component {...pageProps} />
+    </MEMContext.Provider>
+  );
 }
 
+export default ExampleApp;
+
+```
+
+Then, within your app, use it as follows:
+
+```tsx
+export default function Home() {
+  const library = useMEM("yBgIzbc3lvwlBjw6V-G9Woy5Hx2uY37aDQIPoQ5kRRw");
+
+  const [books, setBooks] = useState([]);
+  
+  return (
+    <div>
+      {books?.length > 0 && (
+        books.map(bookName => <div>{bookName}</div>)
+      )}
+    </div>
+  )
+}
 
 ```
 
@@ -57,9 +76,42 @@ Check out our example [app](./example/nextjs) and [components](./example/nextjs/
 
 ## API
 
-### &lt;ArconnectProvider />
+### `MEMContext`
 
-This is the provider component. It should be placed above all components using `useArconnect()`.
+This is the central state of MEM API. You can interact with instantiated functionId's from here by calling them directly:
+
+```tsx
+import Link from "next/link";
+import { useEffect } from "react";
+
+const storeSelector = {
+  "nike": "o2wY...c_de",
+  "adidas": "faW4...gRcQ",
+  "puma": "n4og...RJ_0"
+}
+
+interface IndexProps {
+  storeNumber: number;
+}
+
+function Index({ storeNumber }: IndexProps) {
+  const functionId = storeSelector[storeNumber];
+  const clothingStoreFunction = useMEM(functionId);
+  const { write, read, allFunctions, setFunctionId, allFunctions } = clothingStoreFunction();
+
+  return (
+    <div>
+
+    </div>
+  )
+}
+
+
+
+```
+
+
+
 
 
 ## License
