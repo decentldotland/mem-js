@@ -4,7 +4,7 @@ Arweave blockchain offers several ways to generate a signature via the private k
 
 As of 2023, the following methods can be used by these specific wallets to sign and verify user signatures:
 
-| Supported Methods | Arconnect    | Arconnect <v1   | Arweave.app |
+| Supported Methods | Arconnect    | Arconnect &lt;v1   | Arweave.app |
 |-------------------|--------------|-----------------|-------------|
 | `signTransaction` | Yes (`sign`) | Yes (`sign`)    | Yes         |
 | `signDataItem`    | Yes          | No              | Yes         |
