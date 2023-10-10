@@ -1,12 +1,13 @@
-import MEM from "./core";
-import { input, MEMResponseObject } from "./core/types";
-declare const MEMContext: import("react").Context<Record<string, MEM>>;
-export declare function useMEM(initialFunctionId?: string): {
-    memInstance: MEM;
-    state: any;
-    setFunctionId: import("react").Dispatch<import("react").SetStateAction<string>>;
-    read: (otherFunctionId?: string) => Promise<any>;
-    write: (inputs: input[], otherFunctionId?: string) => Promise<MEMResponseObject>;
-    testnet: (contractType: number, initState: string, input: string, contractSrc: string) => Promise<any>;
-};
+import MEM from '../../../../../../../src/core';
+import { KB, MEM_URL_READ, MEM_URL_TESTNET, MEM_URL_WRITE } from '../../../../../../../src/core/constants';
+import { axios } from '../../../../../../../src/helpers';
+import { input, MEMResponseObject } from '../../../../../../../src/core/types';
+import { MEMContext } from '../../../../../../../src/react/context';
+import useMEM from '../../../../../../../src/react/useMEM';
+import { MEMInstance } from "./react/useMEM/types";
+export default MEM;
+export { useMEM };
 export { MEMContext };
+export type { input, MEMResponseObject, MEMInstance };
+export { axios };
+export { KB, MEM_URL_READ, MEM_URL_TESTNET, MEM_URL_WRITE };
