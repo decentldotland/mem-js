@@ -7,9 +7,9 @@
     "module": "ESNext",
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"]
-    },
+    // "paths": {
+    //   "@/*": ["src/*"]
+    // },
     "importHelpers": true,
     // output .d.ts declaration files for consumers
     "declaration": true,
