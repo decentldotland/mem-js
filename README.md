@@ -2,7 +2,7 @@
   <a href="https://decent.land">
     <img src="https://mem-home.vercel.app/icons/mem/mem-logo-v2.svg" height="180">
   </a>
-  <h3 align="center"><code>@decentldotland/mem-js</code></h3>
+  <h3 align="center"><code>@decentldotland/react-mem-js</code></h3>
   <div align="center">Your easiest foray into Web3. <a href="https://mem.tech">Molecular Execution Machine</a> APIs for React Devs 👷‍♂️ Web3 batteries included.</div>
 </p>
 
@@ -55,16 +55,16 @@ Add it to your project:
 
 ```console
 # npm
-npm install mem-js
+npm install react-mem-js
 
 # yarn
-yarn add mem-js
+yarn add react-mem-js
 
 # pnpm
-pnpm add mem-js
+pnpm add react-mem-js
 
 # bun
-bun add mem-js
+bun add react-mem-js
 ```
 
 ### Setup
@@ -77,7 +77,7 @@ First, let's wrap the app with our provider:
 // If you're using next.js, this should be your _app.tsx file
 import React from 'react';
 
-import { MEMContext } from "mem-js";
+import { MEMContext } from "react-mem-js";
 import "../styles/globals.css";
 
 function ExampleApp({ Component, pageProps }) {

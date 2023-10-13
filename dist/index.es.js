@@ -2,7 +2,7 @@ var S = Object.defineProperty;
 var T = (n, t, e) => t in n ? S(n, t, { enumerable: !0, configurable: !0, writable: !0, value: e }) : n[t] = e;
 var f = (n, t, e) => (T(n, typeof t != "symbol" ? t + "" : t, e), e);
 import { createContext as _, useRef as F, useEffect as w, useContext as L, useState as E } from "react";
-const m = "https://mem-api.com/state/", g = "https://mem-api.com/transactions/", v = "https://mem-testnet-bfdc8ff3530f.herokuapp.com/", R = 1024 * 1024, d = {
+const m = "https://mem-api.com/state/", v = "https://mem-api.com/transactions/", g = "https://mem-testnet-bfdc8ff3530f.herokuapp.com/", R = 1024 * 1024, d = {
   async get(n, t = {}) {
     try {
       const e = await fetch(n, {
@@ -74,7 +74,7 @@ class C {
       const c = {
         functionId: s,
         inputs: t
-      }, i = (await d.post(g, c)).data, h = i.data.execution.state;
+      }, i = (await d.post(v, c)).data, h = i.data.execution.state;
       return this.state = h, i;
     } catch (s) {
       console.log(s);
@@ -89,7 +89,7 @@ class C {
    */
   async testnet(t = 0, e, s, c) {
     try {
-      return (await d.post(v, {
+      return (await d.post(g, {
         contractType: t,
         initState: e,
         input: s,
@@ -117,7 +117,7 @@ function U(n) {
   w(() => {
     e && c !== e ? I(e) : console.warn("No functionId provided, set it via setFunctionId");
   }, [e]), w(() => {
-    console.log(i), JSON.stringify(i).length >= 750 * R && console.warn("State size over 750 KB");
+    JSON.stringify(i).length >= 750 * R && console.warn("State size over 750 KB");
   }, [i]), w(() => {
     Object.keys(t).length >= 10 && console.warn("Instantiated 10 functions -- might decrease performance");
   }, [t]);
@@ -162,7 +162,7 @@ function U(n) {
           inputs: a
         };
         p("isWriteLoading", !0, o);
-        const l = (await d.post(g, u)).data;
+        const l = (await d.post(v, u)).data;
         p("isWriteLoading", !1, o);
         const x = l.data.execution.state;
         return h(x), l;
@@ -173,7 +173,7 @@ function U(n) {
     },
     testnet: async (a = 0, r, o, u) => {
       try {
-        return (await d.post(v, {
+        return (await d.post(g, {
           contractType: a,
           initState: r,
           input: o,
@@ -191,8 +191,8 @@ export {
   C as MEM,
   N as MEMContext,
   m as MEM_URL_READ,
-  v as MEM_URL_TESTNET,
-  g as MEM_URL_WRITE,
+  g as MEM_URL_TESTNET,
+  v as MEM_URL_WRITE,
   d as axios,
   U as useMEM
 };

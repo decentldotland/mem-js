@@ -18,7 +18,7 @@ export default defineConfig({
   build: {
     lib: {
       entry: path.resolve(__dirname, "src/index.tsx"),
-      name: "mem-js",
+      name: "react-mem-api",
       fileName: (format) => `index.${format}.js`
     },
     rollupOptions: {

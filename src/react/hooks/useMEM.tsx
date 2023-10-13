@@ -31,7 +31,6 @@ export default function useMEM(initialFunctionId?: string) {
   }, [functionId]);
 
   useEffect(() => {
-    console.log(state);
     if (JSON.stringify(state).length >= 750 * KB) console.warn("State size over 750 KB");
   }, [state]);
 
