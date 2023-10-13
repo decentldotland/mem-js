@@ -75,7 +75,7 @@ First, let's wrap the app with our provider:
 // If you're using next.js, this should be your _app.tsx file
 import React from 'react';
 
-import { MEMContext } from "react-mem-js";
+import { MEMContext } from "react-mem-api";
 import "../styles/globals.css";
 
 function ExampleApp({ Component, pageProps }) {
@@ -128,7 +128,7 @@ A wrapper around `useContext` that manages the store of MEM instances. Doesn't a
 
 ### currentFunction
 
-Returns the current function being used in mem-js
+Returns the current function being used
 
 ### setFunctionId
 
