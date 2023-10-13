@@ -1,11 +1,11 @@
-var L = Object.defineProperty;
-var S = (o, t, e) => t in o ? L(o, t, { enumerable: !0, configurable: !0, writable: !0, value: e }) : o[t] = e;
-var f = (o, t, e) => (S(o, typeof t != "symbol" ? t + "" : t, e), e);
-import { createContext as _, useContext as F, useState as m, useEffect as w } from "react";
-const M = "https://mem-api.com/state/", g = "https://mem-api.com/transactions/", v = "https://mem-testnet-bfdc8ff3530f.herokuapp.com/", R = 1024 * 1024, d = {
-  async get(o, t = {}) {
+var S = Object.defineProperty;
+var T = (n, t, e) => t in n ? S(n, t, { enumerable: !0, configurable: !0, writable: !0, value: e }) : n[t] = e;
+var f = (n, t, e) => (T(n, typeof t != "symbol" ? t + "" : t, e), e);
+import { createContext as _, useRef as F, useEffect as w, useContext as L, useState as E } from "react";
+const m = "https://mem-api.com/state/", g = "https://mem-api.com/transactions/", v = "https://mem-testnet-bfdc8ff3530f.herokuapp.com/", R = 1024 * 1024, d = {
+  async get(n, t = {}) {
     try {
-      const e = await fetch(o, {
+      const e = await fetch(n, {
         method: "GET",
         headers: (t == null ? void 0 : t.headers) || {}
         // add any other configurations if needed
@@ -15,9 +15,9 @@ const M = "https://mem-api.com/state/", g = "https://mem-api.com/transactions/",
       throw e;
     }
   },
-  async post(o, t = {}, e = {}) {
+  async post(n, t = {}, e = {}) {
     try {
-      const s = await fetch(o, {
+      const s = await fetch(n, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -43,6 +43,10 @@ class C {
   constructor(t) {
     f(this, "functionId", "");
     f(this, "state", {});
+    f(this, "loaders", {
+      isReadLoading: null,
+      isWriteLoading: null
+    });
     t ? (this.functionId = t, this.read(t)) : console.warn("No functionId provided, set it via setFunctionId");
   }
   setFunctionId(t) {
@@ -56,7 +60,7 @@ class C {
     try {
       let e = t || this.functionId;
       t || this._isFunctionId();
-      const s = (await d.get(M + e)).data;
+      const s = (await d.get(m + e)).data;
       return this.state = s, s;
     } catch (e) {
       console.log(e);
@@ -67,11 +71,11 @@ class C {
     try {
       let s = e || this.functionId;
       e || this._isFunctionId();
-      const i = {
+      const c = {
         functionId: s,
         inputs: t
-      }, c = (await d.post(g, i)).data, p = c.data.execution.state;
-      return this.state = p, c;
+      }, i = (await d.post(g, c)).data, h = i.data.execution.state;
+      return this.state = h, i;
     } catch (s) {
       console.log(s);
       return;
@@ -83,97 +87,96 @@ class C {
    * @param input @interface input JSON.stringified too
    * @param contractSrc Stringified contract source code
    */
-  async testnet(t = 0, e, s, i) {
+  async testnet(t = 0, e, s, c) {
     try {
       return (await d.post(v, {
         contractType: t,
         initState: e,
         input: s,
-        contractSrc: i
+        contractSrc: c
       })).data;
-    } catch (c) {
-      console.log(c);
+    } catch (i) {
+      console.log(i);
       return;
     }
   }
 }
 const N = _({});
-function z(o) {
-  var E;
-  const t = F(N), [e, s] = m(o || ""), [i, c] = m({}), p = (E = t[e]) == null ? void 0 : E.MEM;
+function j(n) {
+  const t = F();
+  return w(() => {
+    t.current = n;
+  }, [n]), t.current;
+}
+function U(n) {
+  const t = L(N), [e, s] = E(n || ""), c = j(n || e), [i, h] = E({}), M = t[e];
   if (!t[e]) {
     const a = new C(e);
-    t[e] = {
-      MEM: a,
-      loaders: {
-        isReadLoading: null,
-        isWriteLoading: null
-      }
-    };
-  }
-  function h(a, r, n) {
-    if (!t[n])
-      return;
-    t[n].loaders[a] = r;
-    const u = new CustomEvent("loaderChanged", {
-      detail: { loaders: t[n].loaders, functionId: n }
-    });
-    window.dispatchEvent(u);
+    t[e] = a;
   }
   w(() => {
-    e ? I(e) : console.warn("No functionId provided, set it via setFunctionId");
+    e && c !== e ? I(e) : console.warn("No functionId provided, set it via setFunctionId");
   }, [e]), w(() => {
-    JSON.stringify(i).length >= 750 * R && console.warn("State size over 750 KB");
+    console.log(i), JSON.stringify(i).length >= 750 * R && console.warn("State size over 750 KB");
   }, [i]), w(() => {
     Object.keys(t).length >= 10 && console.warn("Instantiated 10 functions -- might decrease performance");
   }, [t]);
+  function p(a, r, o) {
+    if (!t[o])
+      return;
+    t[o].loaders[a] = r;
+    const u = new CustomEvent("loadStatus", {
+      detail: { functionId: o, loaders: t[o].loaders }
+    });
+    window.dispatchEvent(u);
+  }
   const y = () => {
     if (!e)
       throw new Error("functionId is not initialized.");
-  }, x = async (a) => {
-    delete t[a];
   }, I = async (a) => {
     try {
       let r = a || e;
-      a || y(), h("isReadLoading", !0, r);
-      const n = (await d.get(M + r)).data;
-      return h("isReadLoading", !1, r), c(n), n;
+      a || y(), p("isReadLoading", !0, r);
+      const o = (await d.get(m + r)).data;
+      return p("isReadLoading", !1, r), h(o), o;
     } catch (r) {
       console.log(r);
       return;
     }
   };
   return {
-    currentFunction: p,
+    currentFunction: M,
     setFunctionId: s,
-    destroyFunctionId: x,
+    destroyFunctionId: async (a) => {
+      delete t[a];
+    },
     allFunctions: t,
     state: i,
     read: I,
     write: async (a, r) => {
       try {
-        let n = r || e;
+        let o = r || e;
         r || y();
         const u = {
-          functionId: n,
+          functionId: o,
           inputs: a
         };
-        h("isWriteLoading", !0, n);
+        p("isWriteLoading", !0, o);
         const l = (await d.post(g, u)).data;
-        h("isWriteLoading", !1, n);
-        const T = l.data.execution.state;
-        return c(T), l;
-      } catch (n) {
-        console.log(n);
+        p("isWriteLoading", !1, o);
+        const x = l.data.execution.state;
+        return h(x), l;
+      } catch (o) {
+        console.log(o);
         return;
       }
     },
-    testnet: async (a = 0, r, n, u) => {
+    testnet: async (a = 0, r, o, u) => {
       try {
         return (await d.post(v, {
           contractType: a,
           initState: r,
-          input: n,
+          input: o,
           contractSrc: u
         })).data;
       } catch (l) {
@@ -185,11 +188,11 @@ function z(o) {
 }
 export {
   R as KB,
+  C as MEM,
   N as MEMContext,
-  M as MEM_URL_READ,
+  m as MEM_URL_READ,
   v as MEM_URL_TESTNET,
   g as MEM_URL_WRITE,
   d as axios,
-  C as default,
-  z as useMEM
+  U as useMEM
 };

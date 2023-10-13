@@ -1,7 +1,8 @@
-import { input, MEMResponseObject } from "./types";
+import { input, MEMResponseObject, Loaders } from "./types";
 export default class MEM {
     functionId: string;
     state: any;
+    loaders: Loaders;
     constructor(functionId: string);
     setFunctionId(functionId: string): void;
     private _isFunctionId;

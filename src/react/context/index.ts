@@ -1,6 +1,5 @@
 import { createContext } from "react";
 
-import MEM from "@/core";
-import { loaders } from "./types";
+import MEM from "../../core";
 
-export const MEMContext = createContext<Record<string, { MEM: MEM; loaders: loaders }>>({});
+export const MEMContext = createContext<Record<string, MEM>>({});

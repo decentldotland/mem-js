@@ -38,14 +38,19 @@ export interface MEMResponseObject {
   };
 }
 
-export interface MEM {
-  setFunctionId(functionId: string): void;
-  read(otherFunctionId?: string): Promise<state | undefined>;
-  write(inputs: input[], otherFunctionId?: string): Promise<MEMResponseObject | undefined>;
-  testnet(
-    contractType: number,
-    initState: string,
-    input: string,
-    contractSrc: string
-  ): Promise<MEMResponseObject | undefined>;
+export interface Loaders {
+  isReadLoading: boolean;
+  isWriteLoading: boolean;
 }
+
+// export interface MEM {
+//   setFunctionId(functionId: string): void;
+//   read(otherFunctionId?: string): Promise<state | undefined>;
+//   write(inputs: input[], otherFunctionId?: string): Promise<MEMResponseObject | undefined>;
+//   testnet(
+//     contractType: number,
+//     initState: string,
+//     input: string,
+//     contractSrc: string
+//   ): Promise<MEMResponseObject | undefined>;
+// }

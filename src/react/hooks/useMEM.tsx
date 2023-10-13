@@ -1,44 +1,29 @@
 import { useContext, useEffect, useState } from "react";
 
-import MEM from "@/core";
-import { KB, MEM_URL_READ, MEM_URL_TESTNET, MEM_URL_WRITE } from "@/core/constants";
-import { axios } from "@/helpers";
+import MEM from "../../core";
+import { KB, MEM_URL_READ, MEM_URL_TESTNET, MEM_URL_WRITE } from "../../core/constants";
+import { axios } from "../../helpers";
 
-import { input, MEMResponseObject } from "@/core/types";
+import { input, MEMResponseObject } from "../../core/types";
 import { MEMContext } from "../context";
-import { MEMInstance } from "./types";
-
-// Create Context for MEM instances
+import usePrevious from "./usePrevious";
 
 export default function useMEM(initialFunctionId?: string) {
   const allFunctions = useContext(MEMContext);
   const [functionId, setFunctionId] = useState<string | undefined>(initialFunctionId || "");
+  const prevFunctionId = usePrevious(initialFunctionId || functionId);
   const [state, setState] = useState<any>({});
-  const currentFunction = allFunctions[functionId]?.MEM;
+  const currentFunction = allFunctions[functionId];
 
+  // create new MEM instance if it doesn't exist yet
   if (!allFunctions[functionId]) {
-    const instance = new MEM(functionId);
-    allFunctions[functionId] = {
-      MEM: instance,
-      loaders: {
-        isReadLoading: null,
-        isWriteLoading: null
-      }
-    } as MEMInstance;
+    const MEMInstance = new MEM(functionId);
+    allFunctions[functionId] = MEMInstance;
   }
 
-  function handleLoader(type: "isReadLoading" | "isWriteLoading", newVal: boolean, functionId?: string) {
-    if (!allFunctions[functionId]) return;
-    allFunctions[functionId].loaders[type] = newVal;
-    const event = new CustomEvent("loaderChanged", {
-      detail: { loaders: allFunctions[functionId].loaders, functionId }
-    });
-    window.dispatchEvent(event);
-  }
-
-  // Effect to handle read operation
+  // Read and Populate State on functionId Change
   useEffect(() => {
-    if (functionId) {
+    if (functionId && prevFunctionId !== functionId) {
       read(functionId);
     } else {
       console.warn("No functionId provided, set it via setFunctionId");
@@ -46,6 +31,7 @@ export default function useMEM(initialFunctionId?: string) {
   }, [functionId]);
 
   useEffect(() => {
+    console.log(state);
     if (JSON.stringify(state).length >= 750 * KB) console.warn("State size over 750 KB");
   }, [state]);
 
@@ -53,22 +39,32 @@ export default function useMEM(initialFunctionId?: string) {
     if (Object.keys(allFunctions).length >= 10) console.warn("Instantiated 10 functions -- might decrease performance");
   }, [allFunctions]);
 
+  // Internal API methods
+
+  // event emitter for read/write loading states
+  function _handleLoader(type: "isReadLoading" | "isWriteLoading", newVal: boolean, functionId?: string) {
+    if (!allFunctions[functionId]) return;
+    allFunctions[functionId].loaders[type] = newVal;
+    const event = new CustomEvent("loadStatus", {
+      detail: { functionId, loaders: allFunctions[functionId].loaders }
+    });
+    window.dispatchEvent(event);
+  }
+
   const _isFunctionId = () => {
     if (!functionId) throw new Error("functionId is not initialized.");
   };
 
-  const destroyFunctionId = async (functionId: string) => {
-    delete allFunctions[functionId];
-  };
+  // Public API methods
 
   const read = async (otherFunctionId?: string) => {
     try {
       let currentFunctionId = otherFunctionId || functionId;
       if (!otherFunctionId) _isFunctionId();
 
-      handleLoader("isReadLoading", true, currentFunctionId);
+      _handleLoader("isReadLoading", true, currentFunctionId);
       const responseState = (await axios.get(MEM_URL_READ + currentFunctionId)).data;
-      handleLoader("isReadLoading", false, currentFunctionId);
+      _handleLoader("isReadLoading", false, currentFunctionId);
 
       setState(responseState);
       return responseState;
@@ -87,9 +83,9 @@ export default function useMEM(initialFunctionId?: string) {
         inputs
       };
 
-      handleLoader("isWriteLoading", true, currentFunctionId);
+      _handleLoader("isWriteLoading", true, currentFunctionId);
       const response = (await axios.post(MEM_URL_WRITE, payload)).data as MEMResponseObject;
-      handleLoader("isWriteLoading", false, currentFunctionId);
+      _handleLoader("isWriteLoading", false, currentFunctionId);
 
       const newState = response.data.execution.state;
       setState(newState);
@@ -115,6 +111,10 @@ export default function useMEM(initialFunctionId?: string) {
     }
   };
 
+  const destroyFunctionId = async (functionId: string) => {
+    delete allFunctions[functionId];
+  };
+
   return {
     currentFunction,
     setFunctionId,
@@ -127,4 +127,4 @@ export default function useMEM(initialFunctionId?: string) {
   };
 }
 
-export { MEMContext }; // Export MEMContext so it can be provided at the top level
+export { MEMContext };

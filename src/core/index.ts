@@ -1,10 +1,14 @@
 import { MEM_URL_READ, MEM_URL_TESTNET, MEM_URL_WRITE } from "./constants";
 import { axios } from "../helpers";
-import { input, MEMResponseObject } from "./types";
+import { input, MEMResponseObject, Loaders } from "./types";
 
 export default class MEM {
   functionId: string = "";
   state: any = {};
+  loaders: Loaders = {
+    isReadLoading: null,
+    isWriteLoading: null
+  };
 
   constructor(functionId: string) {
     if (functionId) {

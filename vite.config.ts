@@ -10,11 +10,11 @@ export default defineConfig({
       insertTypesEntry: true
     })
   ],
-  resolve: {
-    alias: {
-      "@": "/src"
-    }
-  },
+  // resolve: {
+  //   alias: {
+  //     "@": "/src"
+  //   }
+  // },
   build: {
     lib: {
       entry: path.resolve(__dirname, "src/index.tsx"),
