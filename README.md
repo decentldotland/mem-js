@@ -48,23 +48,21 @@ export default function Homepage() {
 }
 ```
 
-- 
-
 ## Install
 Add it to your project:
 
 ```console
 # npm
-npm install react-mem-js
+npm install react-mem-api
 
 # yarn
-yarn add react-mem-js
+yarn add react-mem-api
 
 # pnpm
-pnpm add react-mem-js
+pnpm add react-mem-api
 
 # bun
-bun add react-mem-js
+bun add react-mem-api
 ```
 
 ### Setup
