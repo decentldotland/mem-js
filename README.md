@@ -14,8 +14,8 @@
 We've made sure unecessary bloat is kept at bay. Check out the package size:
 
 <div>
-  <div>dist/index.es.js  <strong style="color: green; ">4.97 kB</strong> │ gzip: 1.78 kB</div>
-  <div>dist/index.umd.js  <strong style="color: green; ">3.41 kB</strong> │ gzip: 1.48 kB</div>
+  <div>`dist/index.es.js` <strong style="color: green; ">4.97 kB</strong> │ gzip: 1.78 kB</div>
+  <div>`dist/index.umd.js` <strong style="color: green; ">3.41 kB</strong> │ gzip: 1.48 kB</div>
 </div>
 
 - Fast setup
@@ -204,9 +204,9 @@ const result = await testnet(options);
 
 ## Roadmap
 
-Step 1: Core API built ✅
-Step 2: Add `everpay.js` and `arseed` file uploading helpers for `MEM` ⏳
-Step 3: Wallet APIs like ETH, SOL, and more 🔜
+- Core API built ✅
+- Add `everpay.js` and `arseed` file uploading helpers for `MEM` ⏳
+- Wallet APIs like ETH, SOL, and more 🔜
 
 ## License
 This project is licensed under the [MIT license](./LICENSE)
