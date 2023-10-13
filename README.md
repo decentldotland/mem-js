@@ -2,7 +2,7 @@
   <a href="https://decent.land">
     <img src="https://mem-home.vercel.app/icons/mem/mem-logo-v2.svg" height="180">
   </a>
-  <h3 align="center"><code>@decentldotland/react-mem-js</code></h3>
+  <h3 align="center"><code>@decentldotland/react-mem-api</code></h3>
   <div align="center">Your easiest foray into Web3. <a href="https://mem.tech">Molecular Execution Machine</a> APIs for React Devs 👷‍♂️ Web3 batteries included.</div>
 </p>
 
